@@ -1,2 +1,4 @@
 .gittoken
 shared
+.env.json
+node_modules
