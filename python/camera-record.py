@@ -24,19 +24,19 @@ camera.resolution = (1920, 1080);
 
 while True:
 	pir.wait_for_motion();
-	
+
 	isArmedFile = open(settingsPath + "is_armed.txt", "rt");
 	is_armed = isArmedFile.read().replace('\n', '');
-        isArmedFile.close();
-	
+		isArmedFile.close();
+
 	if is_armed == "1":
 		print("Motion detected, recording!");
-		
+
 		camera.start_preview();
 		sleep(2);
 		camera.capture(sharedPath + "photo/" + filename_photo);
 		camera.start_recording(sharedPath + "video/" + filename_video);
-		
+
 		pir.wait_for_no_motion();
 		print("No more motion, stopping...");
 		camera.stop_recording();
