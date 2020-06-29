@@ -1,4 +1,5 @@
 .gittoken
+shared/config
 shared/data
 shared/photo
 shared/video
