@@ -1,4 +1,6 @@
 .gittoken
-shared
+shared/data
+shared/photo
+shared/video
 .env.json
 node_modules
