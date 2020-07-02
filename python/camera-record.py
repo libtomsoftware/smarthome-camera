@@ -23,9 +23,9 @@ camera.rotation = 270
 camera.resolution = (1920, 1080)
 
 settingsFile = open(settingsPath + "status.txt", "rt")
-settings = settingsFile.read().replace('\n', '')
+settings = settingsFile.read().replace('\n', '').split(",")
 
-print("Settings: %s", settings)
+print("Settings: %s" % (settings[0]))
 
 # while True:
 # 	pir.wait_for_motion();

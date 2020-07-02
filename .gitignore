@@ -3,5 +3,6 @@ shared/config
 shared/data
 shared/photo
 shared/video
+shared/settings
 .env.json
 node_modules
