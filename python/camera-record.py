@@ -21,6 +21,7 @@ filename_photo = filename + ".jpg"
 camera = PiCamera()
 camera.rotation = 270
 camera.resolution = (1920, 1080)
+camera.led = False
 
 while True:
     pir.wait_for_motion()
@@ -38,16 +39,17 @@ while True:
 
         if is_enabled == "1":
             print("Motion detected, recording!")
-
+            camera.led = True
             camera.start_preview()
             sleep(2)
             camera.capture(sharedPath + "photo/" + filename_photo)
             camera.start_recording(sharedPath + "video/" + filename_video)
-
+            sleep(10)
             pir.wait_for_no_motion()
             print("No more motion, stopping...")
             camera.stop_recording()
             camera.stop_preview()
+            camera.led = False
 
             f = open(sharedPath + "data/" + timestamp + ".csv", "w")
             f.write(device + "," + timestamp + "," +
