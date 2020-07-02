@@ -28,26 +28,28 @@ while True:
     settingsFile = open(settingsPath + "status.txt", "rt")
     settings = settingsFile.read().replace('\n', '').split(",")
     settingsFile.close()
-    is_enabled = settings[0]
-    is_armed = settings[1]
 
-    if is_armed == "1":
-        print("Alarm! Alarm! Alarm!")
+    if len(settings) == 2:
+        is_enabled = settings[0]
+        is_armed = settings[1]
 
-    if is_enabled == "1":
-        print("Motion detected, recording!")
+        if is_armed == "1":
+            print("Alarm! Alarm! Alarm!")
 
-        camera.start_preview()
-        sleep(2)
-        camera.capture(sharedPath + "photo/" + filename_photo)
-        camera.start_recording(sharedPath + "video/" + filename_video)
+        if is_enabled == "1":
+            print("Motion detected, recording!")
 
-        pir.wait_for_no_motion()
-        print("No more motion, stopping...")
-        camera.stop_recording()
-        camera.stop_preview()
+            camera.start_preview()
+            sleep(2)
+            camera.capture(sharedPath + "photo/" + filename_photo)
+            camera.start_recording(sharedPath + "video/" + filename_video)
 
-        f = open(sharedPath + "data/" + timestamp + ".csv", "w")
-        f.write(device + "," + timestamp + "," +
-                filename_photo + "," + filename_video)
-        f.close()
+            pir.wait_for_no_motion()
+            print("No more motion, stopping...")
+            camera.stop_recording()
+            camera.stop_preview()
+
+            f = open(sharedPath + "data/" + timestamp + ".csv", "w")
+            f.write(device + "," + timestamp + "," +
+                    filename_photo + "," + filename_video)
+            f.close()
