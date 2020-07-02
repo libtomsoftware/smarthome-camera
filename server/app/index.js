@@ -16,6 +16,6 @@ app.use(
 
 app.use(routes());
 
-monitor.isArmed();
+monitor.checkState();
 
 module.exports = app;
