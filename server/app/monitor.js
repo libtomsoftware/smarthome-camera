@@ -15,8 +15,11 @@ const checkState = async () => {
     const status = await axios.get(STATUS_URL);
     const { is_armed, is_enabled } = status.data;
 
-    fs.writeFileSync("./shared/data/is_armed.txt", is_armed);
-    fs.writeFileSync("./shared/data/settings.txt", `${is_enabled},${is_armed}`);
+    fs.writeFileSync("./shared/settings/is_armed.txt", is_armed);
+    fs.writeFileSync(
+      "./shared/settings/status.txt",
+      `${is_enabled},${is_armed}`
+    );
 
     checkStateTimeout = setTimeout(checkState, successTimeout);
   } catch (error) {
