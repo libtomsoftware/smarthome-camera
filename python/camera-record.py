@@ -22,7 +22,7 @@ camera = PiCamera()
 camera.rotation = 270
 camera.resolution = (1920, 1080)
 
-settingsFile = open(settingsPath + "settings.txt", "rt")
+settingsFile = open(settingsPath + "status.txt", "rt")
 settings = settingsFile.read().replace('\n', '')
 
 print("Settings: %s", settings)
