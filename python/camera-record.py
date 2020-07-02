@@ -22,31 +22,32 @@ camera = PiCamera()
 camera.rotation = 270
 camera.resolution = (1920, 1080)
 
-settingsFile = open(settingsPath + "status.txt", "rt")
-settings = settingsFile.read().replace('\n', '').split(",")
+while True:
+    pir.wait_for_motion()
 
-print("Settings: %s" % (settings[0]))
+    settingsFile = open(settingsPath + "status.txt", "rt")
+    settings = settingsFile.read().replace('\n', '').split(",")
+    settingsFile.close()
+    is_enabled = settings[0]
+    is_armed = settings[1]
 
-# while True:
-# 	pir.wait_for_motion();
+    if is_armed == "1":
+        print("Alarm! Alarm! Alarm!")
 
-# 	isArmedFile = open(settingsPath + "is_armed.txt", "rt");
-# 	is_armed = isArmedFile.read().replace('\n', '');
-# 		isArmedFile.close();
+    if is_enabled == "1":
+        print("Motion detected, recording!")
 
-# 	if is_armed == "1":
-# 		print("Motion detected, recording!");
+        camera.start_preview()
+        sleep(2)
+        camera.capture(sharedPath + "photo/" + filename_photo)
+        camera.start_recording(sharedPath + "video/" + filename_video)
 
-# 		camera.start_preview();
-# 		sleep(2);
-# 		camera.capture(sharedPath + "photo/" + filename_photo);
-# 		camera.start_recording(sharedPath + "video/" + filename_video);
+        pir.wait_for_no_motion()
+        print("No more motion, stopping...")
+        camera.stop_recording()
+        camera.stop_preview()
 
-# 		pir.wait_for_no_motion();
-# 		print("No more motion, stopping...");
-# 		camera.stop_recording();
-# 		camera.stop_preview();
-
-# 		f = open(sharedPath + "data/" + timestamp + ".csv", "w");
-# 		f.write(device + "," + timestamp + "," + filename_photo + "," + filename_video);
-# 		f.close();
+        f = open(sharedPath + "data/" + timestamp + ".csv", "w")
+        f.write(device + "," + timestamp + "," +
+                filename_photo + "," + filename_video)
+        f.close()
