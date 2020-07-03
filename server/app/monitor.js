@@ -17,7 +17,9 @@ const checkState = async () => {
   checkStateTimeout = null;
 
   try {
-    const status = await axios.get(`${STATUS_URL}?id=${CONFIG.DEVICE_ID}`);
+    const status = await axios.get(
+      `${STATUS_URL}?id=${CONFIG.DEVICE_ID}&type=${CONFIG.DEVICE_TYPE}`
+    );
     const { is_armed, is_enabled } = status.data;
 
     fs.writeFileSync(
