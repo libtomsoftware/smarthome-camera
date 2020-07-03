@@ -33,18 +33,28 @@ module.exports = async (task) => {
       //     fs.createReadStream(FILES_PATH + task.timestamp + ".h264")
       //   );
 
-      const { data } = await axios.post(UPLOAD_URL, formData, {
-        headers: {
-          ...formData.getHeaders(),
-        },
-      });
-
-      if (data.result === "success") {
-        axios.post(TASKS_URL, {
-          ...task,
-          progress: "finished",
+      axios
+        .post(UPLOAD_URL, formData, {
+          headers: {
+            ...formData.getHeaders(),
+          },
+        })
+        .then(({ data }) => {
+          if (data.result === "success") {
+            axios
+              .post(TASKS_URL, {
+                ...task,
+                progress: "finished",
+              })
+              .then(() => {
+                fs.remove(DATA_PATH + task.timestamp + ".csv", () => {
+                  fs.remove(FILES_PATH + task.timestamp + ".jpg", () => {
+                    fs.remove(FILES_PATH + task.timestamp + ".h264");
+                  });
+                });
+              });
+          }
         });
-      }
     }
   }
 };
