@@ -1,8 +1,7 @@
 .gittoken
 shared/config
 shared/data
-shared/photo
-shared/video
 shared/settings
+server/app/files
 .env.json
 node_modules
