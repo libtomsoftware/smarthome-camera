@@ -25,10 +25,10 @@ module.exports = async (task) => {
 
       formData.append("csv", fs.createReadStream(DATA_PATH + task.id + ".csv"));
 
-      //   formData.append(
-      //     "video",
-      //     fs.createReadStream(FILES_PATH + task.id + ".h264")
-      //   );
+      formData.append(
+        "video",
+        fs.createReadStream(FILES_PATH + task.id + ".h264")
+      );
 
       axios
         .post(UPLOAD_URL, formData, {
