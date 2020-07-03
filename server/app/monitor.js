@@ -39,25 +39,29 @@ const checkData = async () => {
 
   try {
     const dataFiles = fs.readdirSync(sharedDataPath);
-    const report = [];
 
-    dataFiles.forEach((file) => {
-      const fileContent = fs
-        .readFileSync(sharedDataPath + file, "utf8")
-        .split(",");
+    if (dataFiles.length) {
+      const report = [];
+      dataFiles.forEach((file) => {
+        const fileContent = fs
+          .readFileSync(sharedDataPath + file, "utf8")
+          .split(",");
 
-      report.push({
-        device: fileContent[0],
-        timestamp: fileContent[1],
-        image: fileContent[2],
-        video: fileContent[3],
+        if (fileContent && fileContent.length) {
+          report.push({
+            device: fileContent[0],
+            timestamp: fileContent[1],
+            image: fileContent[2],
+            video: fileContent[3],
+          });
+        }
       });
-    });
 
-    const { data } = await axios.post(REPORT_URL, report);
+      const { data } = await axios.post(REPORT_URL, report);
 
-    if (data.role && data.role === "task") {
-      tasks.start(data.details);
+      if (data.role && data.role === "task") {
+        tasks.start(data.details);
+      }
     }
 
     checkDataTimeout = setTimeout(checkData, checkDataSuccessRetryInterval);
