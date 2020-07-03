@@ -17,5 +17,6 @@ app.use(
 app.use(routes());
 
 monitor.checkState();
+monitor.checkData();
 
 module.exports = app;

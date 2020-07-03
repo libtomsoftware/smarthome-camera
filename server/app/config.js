@@ -11,5 +11,6 @@ module.exports = {
       BAD_GATEWAY: 502,
     },
   },
+  DEVICE_ID: process.env.DEVICE_ID,
   SMARTHOME_CENTRAL_URL: process.env.SMARTHOME_CENTRAL_URL,
 };

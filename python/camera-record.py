@@ -6,6 +6,7 @@ import time
 import csv
 
 pir = MotionSensor(4)
+filesPath = "../server/app/files/"
 sharedPath = "../shared/"
 configPath = sharedPath + "config/"
 settingsPath = sharedPath + "settings/"
@@ -42,8 +43,8 @@ while True:
             camera.led = True
             camera.start_preview()
             sleep(2)
-            camera.capture(sharedPath + "photo/" + filename_photo)
-            camera.start_recording(sharedPath + "video/" + filename_video)
+            camera.capture(filesPath + filename_photo)
+            camera.start_recording(filesPath + filename_video)
             sleep(10)
             pir.wait_for_no_motion()
             print("No more motion, stopping...")
