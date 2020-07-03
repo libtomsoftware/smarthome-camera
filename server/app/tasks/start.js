@@ -20,17 +20,14 @@ module.exports = async (task) => {
 
       formData.append(
         "image",
-        fs.createReadStream(FILES_PATH + task.timestamp + ".jpg")
+        fs.createReadStream(FILES_PATH + task.id + ".jpg")
       );
 
-      formData.append(
-        "csv",
-        fs.createReadStream(DATA_PATH + task.timestamp + ".csv")
-      );
+      formData.append("csv", fs.createReadStream(DATA_PATH + task.id + ".csv"));
 
       //   formData.append(
       //     "video",
-      //     fs.createReadStream(FILES_PATH + task.timestamp + ".h264")
+      //     fs.createReadStream(FILES_PATH + task.id + ".h264")
       //   );
 
       axios

@@ -52,7 +52,7 @@ while True:
             camera.stop_preview()
             camera.led = False
 
-            f = open(sharedPath + "data/" + timestamp + ".csv", "w")
+            f = open(sharedPath + "data/" + filename + ".csv", "w")
             f.write(device + "," + timestamp + "," +
                     filename_photo + "," + filename_video)
             f.close()
