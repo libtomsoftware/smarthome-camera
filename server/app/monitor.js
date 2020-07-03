@@ -9,7 +9,7 @@ const sharedDataPath = "./shared/data/";
 let checkStateTimeout;
 let checkDataTimeout;
 
-const checkStateSuccessRetryInterval = 5000; //5 secs
+const checkStateSuccessRetryInterval = 10000; //5 secs
 const checkDataSuccessRetryInterval = 60000; //60 secs
 const failureRetryInterval = 1800 * 1000; //30 mins
 
