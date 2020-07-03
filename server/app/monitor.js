@@ -18,7 +18,7 @@ const checkState = async () => {
 
   try {
     const status = await axios.get(
-      `${STATUS_URL}?id=${CONFIG.DEVICE_ID}&type=${CONFIG.DEVICE_TYPE}`
+      `${STATUS_URL}?id=${CONFIG.DEVICE_ID}&type=${CONFIG.DEVICE_TYPE}&name=${CONFIG.DEVICE_NAME}`
     );
     const { is_armed, is_enabled } = status.data;
 
