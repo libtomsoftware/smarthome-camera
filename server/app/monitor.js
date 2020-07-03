@@ -3,7 +3,7 @@ const fs = require("fs-extra");
 const CONFIG = require("./config");
 const tasks = require("./tasks");
 const STATUS_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/status";
-const REPORT_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/report";
+const REPORT_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/reports";
 const sharedDataPath = "./shared/data/";
 
 let checkStateTimeout;
