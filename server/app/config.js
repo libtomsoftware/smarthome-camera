@@ -12,5 +12,6 @@ module.exports = {
     },
   },
   DEVICE_ID: process.env.DEVICE_ID,
+  DEVICE_TYPE: process.env.DEVICE_TYPE,
   SMARTHOME_CENTRAL_URL: process.env.SMARTHOME_CENTRAL_URL,
 };
