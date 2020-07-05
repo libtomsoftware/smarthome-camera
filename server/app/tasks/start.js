@@ -17,41 +17,55 @@ module.exports = async (task) => {
 
     if (data.progress === "pending") {
       const formData = new FormData();
+      const imagePath = FILES_PATH + task.id + ".jpg";
+      const imageExists = fs.existsSync(imagePath);
+      const videoPath = FILES_PATH + task.id + ".h264";
+      const videoExists = fs.existsSync(videoPath);
+      const csvPath = DATA_PATH + task.id + ".csv";
+      const csvExists = fs.existsSync(csvPath);
 
-      formData.append(
-        "image",
-        fs.createReadStream(FILES_PATH + task.id + ".jpg")
-      );
+      if (!imageExists && !csvExists && !videoExists) {
+        return;
+      }
 
-      formData.append("csv", fs.createReadStream(DATA_PATH + task.id + ".csv"));
+      if (csvExists) {
+        formData.append("csv", fs.createReadStream(csvPath));
+      }
 
-      formData.append(
-        "video",
-        fs.createReadStream(FILES_PATH + task.id + ".h264")
-      );
+      if (imageExists) {
+        formData.append("image", fs.createReadStream(imagePath));
+      }
 
-      axios
-        .post(UPLOAD_URL, formData, {
-          headers: {
-            ...formData.getHeaders(),
-          },
-        })
-        .then(({ data }) => {
-          if (data.result === "success") {
-            axios
-              .post(TASKS_URL, {
-                ...task,
-                progress: "finished",
-              })
-              .then(() => {
-                fs.remove(DATA_PATH + task.timestamp + ".csv", () => {
-                  fs.remove(FILES_PATH + task.timestamp + ".jpg", () => {
-                    fs.remove(FILES_PATH + task.timestamp + ".h264");
+      if (videoExists) {
+        formData.append("video", fs.createReadStream(videoPath));
+      }
+
+      try {
+        axios
+          .post(UPLOAD_URL, formData, {
+            headers: {
+              ...formData.getHeaders(),
+            },
+          })
+          .then(({ data }) => {
+            if (data.result === "success") {
+              axios
+                .post(TASKS_URL, {
+                  ...task,
+                  progress: "finished",
+                })
+                .then(() => {
+                  fs.remove(csvPath, () => {
+                    fs.remove(imagePath, () => {
+                      fs.remove(videoPath);
+                    });
                   });
                 });
-              });
-          }
-        });
+            }
+          });
+      } catch (error) {
+        console.log("Error", error);
+      }
     }
   }
 };
