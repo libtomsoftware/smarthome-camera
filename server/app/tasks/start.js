@@ -8,6 +8,16 @@ const UPLOAD_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/upload";
 const FILES_PATH = root + "/server/app/files/";
 const DATA_PATH = root + "/shared/data/";
 
+function getResultDetails(data) {
+  let resultDetails = "";
+
+  resultDetails += data.csvExists ? "+" : "-";
+  resultDetails += data.imageExists ? "+" : "-";
+  resultDetails += data.videoExists ? "+" : "-";
+
+  return resultDetails;
+}
+
 module.exports = async (task) => {
   if (task.progress === "comissioned" && task.type === "upload") {
     const { data } = await axios.post(TASKS_URL, {
@@ -48,19 +58,18 @@ module.exports = async (task) => {
             },
           })
           .then(({ data }) => {
+            axios.post(TASKS_URL, {
+              ...task,
+              progress: data.result,
+              details: getResultDetails(data),
+            });
+
             if (data.result === "success") {
-              axios
-                .post(TASKS_URL, {
-                  ...task,
-                  progress: "finished",
-                })
-                .then(() => {
-                  fs.remove(csvPath, () => {
-                    fs.remove(imagePath, () => {
-                      fs.remove(videoPath);
-                    });
-                  });
+              fs.remove(csvPath, () => {
+                fs.remove(imagePath, () => {
+                  fs.remove(videoPath);
                 });
+              });
             }
           });
       } catch (error) {
