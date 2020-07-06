@@ -61,3 +61,8 @@ while True:
                     filename_photo + "," + filename_video)
             f.close()
             sleep(0.5)
+            print("Converting video...")
+            videoConvertCommand = "MP4Box -add " + filesPath + filename + \
+                ".h264 " + filesPath + filename + ".mp4"
+            call([videoConvertCommand], shell=True)
+            print("Video converted...")
