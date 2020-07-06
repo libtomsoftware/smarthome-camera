@@ -2,6 +2,7 @@
 from picamera import PiCamera
 from gpiozero import MotionSensor
 from time import sleep
+import os
 import time
 import csv
 
@@ -60,7 +61,7 @@ while True:
             videoH264 = filesPath + filename + ".h264"
             videoMp4 = filesPath + filename + ".mp4"
             command = "MP4Box -add " + videoH264 + " " + videoMp4
-            call([command], shell=True)
+            os.system(command)
 
             f = open(sharedPath + "data/" + filename + ".csv", "w")
             f.write(device + "," + timestamp + "," +
