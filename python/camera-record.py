@@ -25,6 +25,8 @@ camera.rotation = 270
 camera.resolution = (1920, 1080)
 camera.led = False
 
+print("Starting camera monitoring...")
+
 while True:
     pir.wait_for_motion()
 
