@@ -5,6 +5,7 @@ import time
 
 appPath = "/home/pi/smarthome/camera/"
 filesPath = appPath + "server/app/files/"
+sharedPath = appPath + "shared/"
 configPath = sharedPath + "config/"
 
 f = open(configPath + "device.txt", "rt")
