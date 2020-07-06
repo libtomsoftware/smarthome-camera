@@ -65,5 +65,5 @@ while True:
 
             f = open(sharedPath + "data/" + filename + ".csv", "w")
             f.write(device + "," + timestamp + "," +
-                    filename_photo + "," + filename_video)
+                    filename_photo + "," + filename + ".mp4")
             f.close()
