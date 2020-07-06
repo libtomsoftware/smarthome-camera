@@ -16,7 +16,7 @@ f = open(configPath + "device.txt", "rt")
 device = f.read().replace('\n', '')
 f.close()
 
-timestamp = str(int(time.time()))
+timestamp = str(int(round(time.time() * 1000)))
 filename = device + "_" + timestamp
 filename_video = filename + ".h264"
 filename_photo = filename + ".jpg"
