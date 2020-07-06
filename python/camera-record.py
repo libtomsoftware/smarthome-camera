@@ -55,7 +55,9 @@ while True:
             camera.stop_preview()
             camera.led = False
 
+            sleep(0.5)
             f = open(sharedPath + "data/" + filename + ".csv", "w")
             f.write(device + "," + timestamp + "," +
                     filename_photo + "," + filename_video)
             f.close()
+            sleep(0.5)
