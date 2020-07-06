@@ -35,7 +35,7 @@ while True:
         is_enabled = settings[0]
         is_armed = settings[1]
 
-        timestamp = str(int(round(time.time() * 1000)))
+        timestamp = str(int(time.time()))
         filename = device + "_" + timestamp
         filename_video = filename + ".h264"
         filename_photo = filename + ".jpg"

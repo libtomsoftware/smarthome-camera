@@ -53,7 +53,7 @@ const checkData = async () => {
         if (fileContent && fileContent.length) {
           const reportData = {
             device: fileContent[0],
-            timestamp: fileContent[1],
+            timestamp: Date.now(),
             image: fileContent[2],
             video: fileContent[3],
           };
