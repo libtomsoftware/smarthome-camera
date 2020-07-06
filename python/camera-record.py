@@ -50,19 +50,13 @@ while True:
             camera.start_recording(filesPath + filename_video)
             sleep(10)
             pir.wait_for_no_motion()
+
             print("No more motion, stopping...")
             camera.stop_recording()
             camera.stop_preview()
             camera.led = False
 
-            sleep(0.5)
             f = open(sharedPath + "data/" + filename + ".csv", "w")
             f.write(device + "," + timestamp + "," +
                     filename_photo + "," + filename_video)
             f.close()
-            sleep(0.5)
-            print("Converting video...")
-            videoConvertCommand = "MP4Box -add " + filesPath + filename + \
-                ".h264 " + filesPath + filename + ".mp4"
-            call([videoConvertCommand], shell=True)
-            print("Video converted...")
