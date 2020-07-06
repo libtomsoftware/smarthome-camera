@@ -19,7 +19,7 @@ module.exports = async (task) => {
       const formData = new FormData();
       const imagePath = FILES_PATH + task.id + ".jpg";
       const imageExists = fs.existsSync(imagePath);
-      const videoPath = FILES_PATH + task.id + ".h264";
+      const videoPath = FILES_PATH + task.id + ".mp4";
       const videoExists = fs.existsSync(videoPath);
       const csvPath = DATA_PATH + task.id + ".csv";
       const csvExists = fs.existsSync(csvPath);
