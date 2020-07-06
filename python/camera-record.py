@@ -6,8 +6,9 @@ import time
 import csv
 
 pir = MotionSensor(4)
-filesPath = "../server/app/files/"
-sharedPath = "../shared/"
+appPath = "~/smarthome/camera/"
+filesPath = appPath + "server/app/files/"
+sharedPath = appPath + "shared/"
 configPath = sharedPath + "config/"
 settingsPath = sharedPath + "settings/"
 
