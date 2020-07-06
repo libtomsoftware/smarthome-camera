@@ -44,18 +44,23 @@ const checkData = async () => {
 
     if (dataFiles.length) {
       const report = [];
+
       dataFiles.forEach((file) => {
         const fileContent = fs
           .readFileSync(sharedDataPath + file, "utf8")
           .split(",");
 
         if (fileContent && fileContent.length) {
-          report.push({
+          const reportData = {
             device: fileContent[0],
             timestamp: fileContent[1],
             image: fileContent[2],
             video: fileContent[3],
-          });
+          };
+
+          if (reportData.device && reportData.timestamp && reportData.image) {
+            report.push(reportData);
+          }
         }
       });
 
