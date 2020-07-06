@@ -16,10 +16,6 @@ f = open(configPath + "device.txt", "rt")
 device = f.read().replace('\n', '')
 f.close()
 
-timestamp = str(int(round(time.time() * 1000)))
-filename = device + "_" + timestamp
-filename_video = filename + ".h264"
-filename_photo = filename + ".jpg"
 camera = PiCamera()
 camera.rotation = 270
 camera.resolution = (1920, 1080)
@@ -38,6 +34,11 @@ while True:
         is_enabled = settings[0]
         is_armed = settings[1]
 
+        timestamp = str(int(round(time.time() * 1000)))
+        filename = device + "_" + timestamp
+        filename_video = filename + ".h264"
+        filename_photo = filename + ".jpg"
+
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
 
@@ -55,6 +56,11 @@ while True:
             camera.stop_recording()
             camera.stop_preview()
             camera.led = False
+
+            videoH264 = filesPath + filename + ".h264"
+            videoMp4 = filesPath + filename + ".mp4"
+            command = "MP4Box -add " + videoH264 + " " + videoMp4
+            call([command], shell=True)
 
             f = open(sharedPath + "data/" + filename + ".csv", "w")
             f.write(device + "," + timestamp + "," +
