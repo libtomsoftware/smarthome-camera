@@ -39,9 +39,9 @@ while True:
         is_enabled = settings[0]
         is_armed = settings[1]
 
-        if is_enabled == "0"
-        soundAlarm.stop()
-        soundArmingAlarm.stop()
+        if is_enabled == "0":
+            soundAlarm.stop()
+            soundArmingAlarm.stop()
 
         timestamp = str(int(time.time()))
         filename = device + "_" + timestamp
