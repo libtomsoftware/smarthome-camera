@@ -39,23 +39,26 @@ while True:
         is_enabled = settings[0]
         is_armed = settings[1]
 
-        if is_enabled == "0":
-            soundAlarm.stop()
-            soundArmingAlarm.stop()
+        if is_enabled == "0" and mixer.get_busy():
+            mixer.stop()
 
         timestamp = str(int(time.time()))
         filename = device + "_" + timestamp
         filename_video = filename + ".h264"
         filename_photo = filename + ".jpg"
 
-        if is_armed == "0" and is_enabled == "1":
-            soundArmingAlarm.play()
-
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
+            if mixer.get_busy():
+                mixer.stop()
             soundAlarm.play()
 
         if is_enabled == "1":
+            if is_armed == "0":
+                if mixer.get_busy():
+                    mixer.stop()
+                soundArmingAlarm.play()
+
             print("Motion detected, recording!")
             camera.led = True
             camera.start_preview()
