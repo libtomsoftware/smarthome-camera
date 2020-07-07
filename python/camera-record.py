@@ -41,12 +41,12 @@ while True:
         filename_photo = filename + ".jpg"
 
         if is_armed == "0" and is_enabled == "1":
-            os.sysyem(
+            os.system(
                 ['omxplayer --no-keys ~/smarthome/camera/audio/arming-alarm.wav &'])
 
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
-            os.sysyem(
+            os.system(
                 ['omxplayer --no-keys ~/smarthome/camera/audio/alarm.wav &'])
 
         if is_enabled == "1":
