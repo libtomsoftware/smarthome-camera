@@ -41,10 +41,17 @@ while True:
         filename_video = filename + ".h264"
         filename_photo = filename + ".jpg"
 
+        if is_armed == "0" and is_enabled == "1":
+            pygame.mixer.init()
+            pygame.mixer.music.load("../audio/arming-alarm.wav")
+            pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy() == True:
+                continue
+
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
             pygame.mixer.init()
-            pygame.mixer.music.load("../audio/arming-alarm.wav")
+            pygame.mixer.music.load("../audio/alarm.wav")
             pygame.mixer.music.play()
             while pygame.mixer.music.get_busy() == True:
                 continue
