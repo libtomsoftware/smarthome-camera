@@ -5,7 +5,6 @@ from time import sleep
 import os
 import time
 import csv
-import pygame
 
 pir = MotionSensor(4)
 appPath = "/home/pi/smarthome/camera/"
@@ -42,19 +41,13 @@ while True:
         filename_photo = filename + ".jpg"
 
         if is_armed == "0" and is_enabled == "1":
-            pygame.mixer.init()
-            pygame.mixer.music.load("../audio/arming-alarm.wav")
-            pygame.mixer.music.play()
-            while pygame.mixer.music.get_busy() == True:
-                continue
+            os.sysyem(
+                ['omxplayer --no-keys ~/smarthome/camera/audio/arming-alarm.wav &'])
 
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
-            pygame.mixer.init()
-            pygame.mixer.music.load("../audio/alarm.wav")
-            pygame.mixer.music.play()
-            while pygame.mixer.music.get_busy() == True:
-                continue
+            os.sysyem(
+                ['omxplayer --no-keys ~/smarthome/camera/audio/alarm.wav &'])
 
         if is_enabled == "1":
             print("Motion detected, recording!")
