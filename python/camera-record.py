@@ -42,12 +42,11 @@ while True:
 
         if is_armed == "0" and is_enabled == "1":
             os.system(
-                ['omxplayer --no-keys ~/smarthome/camera/audio/arming-alarm.wav &'])
+                'omxplayer --no-keys ~/smarthome/camera/audio/arming-alarm.wav &')
 
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
-            os.system(
-                ['omxplayer --no-keys ~/smarthome/camera/audio/alarm.wav &'])
+            os.system('omxplayer --no-keys ~/smarthome/camera/audio/alarm.wav &')
 
         if is_enabled == "1":
             print("Motion detected, recording!")
