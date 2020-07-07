@@ -20,12 +20,16 @@ const checkState = async () => {
     const status = await axios.get(
       `${STATUS_URL}?id=${CONFIG.DEVICE_ID}&type=${CONFIG.DEVICE_TYPE}&name=${CONFIG.DEVICE_NAME}`
     );
-    const { is_armed, is_enabled } = status.data;
+    const { is_armed, is_enabled, task } = status.data;
 
     fs.writeFileSync(
       "./shared/settings/status.txt",
       `${is_enabled},${is_armed}`
     );
+
+    if (task) {
+      tasks.start(task);
+    }
 
     checkStateTimeout = setTimeout(checkState, checkStateSuccessRetryInterval);
   } catch (error) {
