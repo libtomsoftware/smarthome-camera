@@ -2,7 +2,7 @@
 from picamera import PiCamera
 from gpiozero import MotionSensor
 from time import sleep
-from pygame import mixer
+import pygame
 import os
 import time
 import csv
@@ -24,9 +24,11 @@ camera.resolution = (1920, 1080)
 camera.led = False
 
 print("Starting camera monitoring...")
-mixer.init()
-soundAlarm = mixer.Sound('~/smarthome/camera/audio/alarm.wav')
-soundArmingAlarm = mixer.Sound('~/smarthome/camera/audio/arming-alarm.wav')
+pygame.init()
+pygame.mixer.init()
+soundAlarm = pygame.mixer.Sound('~/smarthome/camera/audio/alarm.wav')
+soundArmingAlarm = pygame.mixer.Sound(
+    '~/smarthome/camera/audio/arming-alarm.wav')
 
 while True:
     pir.wait_for_motion()
@@ -39,8 +41,8 @@ while True:
         is_enabled = settings[0]
         is_armed = settings[1]
 
-        if is_enabled == "0" and mixer.get_busy():
-            mixer.stop()
+        if is_enabled == "0" and pygame.mixer.get_busy():
+            pygame.mixer.stop()
 
         timestamp = str(int(time.time()))
         filename = device + "_" + timestamp
@@ -49,14 +51,14 @@ while True:
 
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
-            if mixer.get_busy():
-                mixer.stop()
+            if pygame.mixer.get_busy():
+                pygame.mixer.stop()
             soundAlarm.play()
 
         if is_enabled == "1":
             if is_armed == "0":
-                if mixer.get_busy():
-                    mixer.stop()
+                if pygame.mixer.get_busy():
+                    pygame.mixer.stop()
                 soundArmingAlarm.play()
 
             print("Motion detected, recording!")
