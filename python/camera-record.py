@@ -2,7 +2,6 @@
 from picamera import PiCamera
 from gpiozero import MotionSensor
 from time import sleep
-import pygame
 import os
 import time
 import csv
@@ -24,11 +23,6 @@ camera.resolution = (1920, 1080)
 camera.led = False
 
 print("Starting camera monitoring...")
-pygame.init()
-pygame.mixer.init()
-soundAlarm = pygame.mixer.Sound('~/smarthome/camera/audio/alarm.wav')
-soundArmingAlarm = pygame.mixer.Sound(
-    '~/smarthome/camera/audio/arming-alarm.wav')
 
 while True:
     pir.wait_for_motion()
@@ -41,26 +35,20 @@ while True:
         is_enabled = settings[0]
         is_armed = settings[1]
 
-        if is_enabled == "0" and pygame.mixer.get_busy():
-            pygame.mixer.stop()
-
         timestamp = str(int(time.time()))
         filename = device + "_" + timestamp
         filename_video = filename + ".h264"
         filename_photo = filename + ".jpg"
 
+        if is_armed == "0" and is_enabled == "1":
+            os.system(
+                'omxplayer --no-keys ~/smarthome/camera/audio/arming-alarm.wav &')
+
         if is_armed == "1":
             print("Alarm! Alarm! Alarm!")
-            if pygame.mixer.get_busy():
-                pygame.mixer.stop()
-            soundAlarm.play()
+            os.system('omxplayer --no-keys ~/smarthome/camera/audio/alarm.wav &')
 
         if is_enabled == "1":
-            if is_armed == "0":
-                if pygame.mixer.get_busy():
-                    pygame.mixer.stop()
-                soundArmingAlarm.play()
-
             print("Motion detected, recording!")
             camera.led = True
             camera.start_preview()
