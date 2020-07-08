@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-from picamera import PiCamera
+import picamera
 from gpiozero import MotionSensor
 from time import sleep
 import os
@@ -17,12 +17,15 @@ f = open(configPath + "device.txt", "rt")
 device = f.read().replace('\n', '')
 f.close()
 
-camera = PiCamera()
-camera.rotation = 270
+camera = picamera.PiCamera()
+#camera.rotation = 270
+camera.rotation = 180
 camera.resolution = (1920, 1080)
 camera.led = False
 
 print("Starting camera monitoring...")
+stream = picamera.PiCameraCircularIO(camera, seconds=20)
+camera.start_recording(stream, format='h264')
 
 while True:
     pir.wait_for_motion()
@@ -55,14 +58,15 @@ while True:
             camera.start_preview()
             sleep(2)
             camera.capture(filesPath + filename_photo)
-            camera.start_recording(filesPath + filename_video)
-            sleep(10)
+            #camera.start_recording(filesPath + filename_video)
+            camera.wait_recording(20)
             pir.wait_for_no_motion()
 
             print("No more motion, stopping...")
             camera.stop_recording()
             camera.stop_preview()
             camera.led = False
+            stream.copy_to(filesPath + filename_video)
 
             videoH264 = filesPath + filename + ".h264"
             videoMp4 = filesPath + filename + ".mp4"
