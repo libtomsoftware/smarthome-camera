@@ -5,6 +5,7 @@ const tasks = require("./tasks");
 const STATUS_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/status";
 const REPORT_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/reports";
 const sharedDataPath = "./shared/data/";
+const { exec } = require("child_process");
 
 let checkStateTimeout;
 let checkDataTimeout;
@@ -21,6 +22,10 @@ const checkState = async () => {
       `${STATUS_URL}?id=${CONFIG.DEVICE_ID}&type=${CONFIG.DEVICE_TYPE}&name=${CONFIG.DEVICE_NAME}`
     );
     const { is_armed, is_enabled, task } = status.data;
+
+    if (is_enabled === "0") {
+      exec("sudo killall -s 9 omxplayer.bin &");
+    }
 
     fs.writeFileSync(
       "./shared/settings/status.txt",
