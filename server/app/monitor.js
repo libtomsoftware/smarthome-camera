@@ -23,8 +23,8 @@ const checkState = async () => {
     );
     const { is_armed, is_enabled, task } = status.data;
 
-    if (is_enabled === "0") {
-      exec("sudo killall -s 9 omxplayer.bin &");
+    if (is_enabled === "0" && CONFIG.STOP_SOUND_COMMAND) {
+      exec(CONFIG.STOP_SOUND_COMMAND);
     }
 
     fs.writeFileSync(

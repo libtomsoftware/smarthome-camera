@@ -15,4 +15,5 @@ module.exports = {
   DEVICE_TYPE: process.env.DEVICE_TYPE,
   DEVICE_NAME: process.env.DEVICE_NAME,
   SMARTHOME_CENTRAL_URL: process.env.SMARTHOME_CENTRAL_URL,
+  STOP_SOUND_COMMAND: process.env.STOP_SOUND_COMMAND,
 };
