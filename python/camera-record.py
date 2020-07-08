@@ -18,14 +18,12 @@ device = f.read().replace('\n', '')
 f.close()
 
 camera = picamera.PiCamera()
-#camera.rotation = 270
 camera.rotation = 180
-camera.resolution = (1920, 1080)
+camera.resolution = (1280, 720)
+camera.framerate = 25
 camera.led = False
 
 print("Starting camera monitoring...")
-# stream = picamera.PiCameraCircularIO(camera, seconds=20)
-# camera.start_recording(stream, format='h264')
 
 while True:
     pir.wait_for_motion()
@@ -56,17 +54,19 @@ while True:
             print("Motion detected, recording!")
             camera.led = True
             camera.start_preview()
+            camera.annotate_background = picamera.Color('black')
+            camera.annotate_text = time.strftime("%Y-%m-%d %H:%M:%S")
             sleep(2)
-            camera.capture(filesPath + filename_photo)
             camera.start_recording(filesPath + filename_video)
-            camera.wait_recording(20)
+            camera.wait_recording(10)
+            camera.capture(filesPath + filename_photo, use_video_port=True)
+            camera.wait_recording(10)
             pir.wait_for_no_motion()
 
             print("No more motion, stopping...")
             camera.stop_recording()
             camera.stop_preview()
             camera.led = False
-            #stream.copy_to(filesPath + filename_video)
 
             videoH264 = filesPath + filename + ".h264"
             videoMp4 = filesPath + filename + ".mp4"
@@ -77,3 +77,5 @@ while True:
             f.write(device + "," + timestamp + "," +
                     filename_photo + "," + filename + ".mp4")
             f.close()
+
+# https://picamera.readthedocs.io/en/release-1.13/recipes1.html
