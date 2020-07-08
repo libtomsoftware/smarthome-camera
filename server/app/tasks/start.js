@@ -10,7 +10,6 @@ const DATA_PATH = root + "/shared/data/";
 const { exec } = require("child_process");
 
 const attemptCommand = (task) => {
-  console.warn("task", task);
   if (task.command) {
     axios
       .post(TASKS_URL, {
@@ -18,7 +17,6 @@ const attemptCommand = (task) => {
         progress: "success",
       })
       .then(({ data }) => {
-        console.warn("data", data);
         if (data.progress === "success") {
           exec(task.command, (err, stdout, stderr) => {
             if (err) {
