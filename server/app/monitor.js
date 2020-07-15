@@ -2,15 +2,16 @@ const axios = require("axios");
 const fs = require("fs-extra");
 const CONFIG = require("./config");
 const tasks = require("./tasks");
-const STATUS_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/status";
-const REPORT_URL = CONFIG.SMARTHOME_CENTRAL_URL + "/reports";
+const URL = CONFIG.SMARTHOME_PROXY_URL || CONFIG.SMARTHOME_CENTRAL_URL;
+const STATUS_URL = URL + "/status";
+const REPORT_URL = URL + "/reports";
 const sharedDataPath = "./shared/data/";
 const { exec } = require("child_process");
 
 let checkStateTimeout;
 let checkDataTimeout;
 
-const checkStateSuccessRetryInterval = 10000; //5 secs
+const checkStateSuccessRetryInterval = 4000; //4 secs
 const checkDataSuccessRetryInterval = 60000; //60 secs
 const failureRetryInterval = 1800 * 1000; //30 mins
 
