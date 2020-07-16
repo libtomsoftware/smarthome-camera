@@ -14,8 +14,6 @@ let tasksInProgress = [];
 
 const attemptCommand = (task) => {
   if (task.command) {
-    tasksInProgress.push(task.id);
-
     axios
       .post(TASKS_URL, {
         ...task,
@@ -116,22 +114,21 @@ const attemptUpload = async (task) => {
 };
 
 module.exports = (task) => {
-  console.warn("already in progress", tasksInProgress);
-  if (
-    task.progress === "comissioned" &&
-    task.type === "upload" &&
-    !tasksInProgress.includes[task.id]
-  ) {
-    tasksInProgress.push(task.id);
-    console.warn("attempt upload, task id", task.id);
+  if (tasksInProgress.includes(task.id)) {
+    console.warn("Task already handled, aborting...");
+
+    return;
+  }
+
+  tasksInProgress.push(task.id);
+
+  console.warn("tasks in progress", tasksInProgress);
+
+  if (task.progress === "comissioned" && task.type === "upload") {
     attemptUpload(task);
   }
 
-  if (
-    task.progress === "comissioned" &&
-    task.type === "command" &&
-    !tasksInProgress.includes[task.id]
-  ) {
+  if (task.progress === "comissioned" && task.type === "command") {
     attemptCommand(task);
   }
 };
