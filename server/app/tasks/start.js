@@ -51,7 +51,6 @@ const attemptUpload = async (task) => {
     const mp4VideoPath = FILES_PATH + task.id + ".mp4";
     const mp4VideoExists = fs.existsSync(mp4VideoPath);
     const h264VideoPath = FILES_PATH + task.id + ".h264";
-    const h264VideoExists = fs.existsSync(h264VideoPath);
     const csvPath = DATA_PATH + task.id + ".csv";
     const csvExists = fs.existsSync(csvPath);
 
@@ -67,7 +66,7 @@ const attemptUpload = async (task) => {
       formData.append("image", fs.createReadStream(imagePath));
     }
 
-    if (videoExists) {
+    if (mp4VideoExists) {
       formData.append("video", fs.createReadStream(mp4VideoPath));
     }
 
@@ -90,7 +89,11 @@ const attemptUpload = async (task) => {
             fs.remove(csvPath, () => {
               fs.remove(imagePath, () => {
                 fs.remove(mp4VideoPath, () => {
-                  fs.remove(h264VideoPath);
+                  const h264VideoExists = fs.existsSync(h264VideoPath);
+
+                  if (h264VideoExists) {
+                    fs.remove(h264VideoPath);
+                  }
                 });
               });
             });
