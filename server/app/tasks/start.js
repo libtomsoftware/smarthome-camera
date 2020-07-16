@@ -79,6 +79,7 @@ const attemptUpload = async (task) => {
     }
 
     try {
+      console.warn("sending files...");
       axios
         .post(UPLOAD_URL, formData, {
           headers: {
@@ -88,6 +89,8 @@ const attemptUpload = async (task) => {
           maxBodyLength: Infinity,
         })
         .then(({ data }) => {
+          console.warn("Files sent, received response", data);
+          console.warn("Updating task with result", data.result);
           axios.post(TASKS_URL, {
             ...task,
             progress: data.result,
