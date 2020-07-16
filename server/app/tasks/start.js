@@ -10,6 +10,8 @@ const FILES_PATH = root + "/server/app/files/";
 const DATA_PATH = root + "/shared/data/";
 const { exec } = require("child_process");
 
+let tasksInProgress = [];
+
 const attemptCommand = (task) => {
   if (task.command) {
     axios
@@ -86,6 +88,10 @@ const attemptUpload = async (task) => {
           });
 
           if (data.result === "success") {
+            tasksInProgress = tasksInProgress.filter(
+              (item) => item !== task.id
+            );
+
             fs.remove(csvPath, () => {
               fs.remove(imagePath, () => {
                 fs.remove(mp4VideoPath, () => {
@@ -106,7 +112,12 @@ const attemptUpload = async (task) => {
 };
 
 module.exports = (task) => {
-  if (task.progress === "comissioned" && task.type === "upload") {
+  if (
+    task.progress === "comissioned" &&
+    task.type === "upload" &&
+    !tasksInProgress.includes[task.id]
+  ) {
+    tasksInProgress.push(task.id);
     attemptUpload(task);
   }
 
