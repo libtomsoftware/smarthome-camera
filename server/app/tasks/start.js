@@ -45,8 +45,6 @@ const attemptCommand = (task) => {
 };
 
 const attemptUpload = async (task) => {
-  tasksInProgress.push(task.id);
-
   const { data } = await axios.post(TASKS_URL, {
     ...task,
     progress: "pending",
@@ -118,13 +116,14 @@ const attemptUpload = async (task) => {
 };
 
 module.exports = (task) => {
+  console.warn("already in progress", tasksInProgress);
   if (
     task.progress === "comissioned" &&
     task.type === "upload" &&
     !tasksInProgress.includes[task.id]
   ) {
+    tasksInProgress.push(task.id);
     console.warn("attempt upload, task id", task.id);
-    console.warn("already in progress", tasksInProgress);
     attemptUpload(task);
   }
 
