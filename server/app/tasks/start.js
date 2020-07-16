@@ -89,14 +89,12 @@ const attemptUpload = async (task) => {
           maxBodyLength: Infinity,
         })
         .then(({ data }) => {
-          console.warn("Files sent, received response", data);
-          console.warn("Updating task with result", data.result);
-          axios.post(TASKS_URL, {
-            ...task,
-            progress: data.result,
-          });
-
           if (data.result === "success") {
+            axios.post(TASKS_URL, {
+              ...task,
+              progress: data.result,
+            });
+
             tasksInProgress = tasksInProgress.filter(
               (item) => item !== task.id
             );
