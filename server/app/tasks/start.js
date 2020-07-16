@@ -48,12 +48,14 @@ const attemptUpload = async (task) => {
     const formData = new FormData();
     const imagePath = FILES_PATH + task.id + ".jpg";
     const imageExists = fs.existsSync(imagePath);
-    const videoPath = FILES_PATH + task.id + ".mp4";
-    const videoExists = fs.existsSync(videoPath);
+    const mp4VideoPath = FILES_PATH + task.id + ".mp4";
+    const mp4VideoExists = fs.existsSync(mp4VideoPath);
+    const h264VideoPath = FILES_PATH + task.id + ".h264";
+    const h264VideoExists = fs.existsSync(h264VideoPath);
     const csvPath = DATA_PATH + task.id + ".csv";
     const csvExists = fs.existsSync(csvPath);
 
-    if (!imageExists && !csvExists && !videoExists) {
+    if (!imageExists && !csvExists && !mp4VideoExists) {
       return;
     }
 
@@ -66,7 +68,7 @@ const attemptUpload = async (task) => {
     }
 
     if (videoExists) {
-      formData.append("video", fs.createReadStream(videoPath));
+      formData.append("video", fs.createReadStream(mp4VideoPath));
     }
 
     try {
@@ -85,9 +87,13 @@ const attemptUpload = async (task) => {
           });
 
           if (data.result === "success") {
-            fs.remove(csvPath);
-            fs.remove(imagePath);
-            fs.remove(videoPath);
+            fs.remove(csvPath, () => {
+              fs.remove(imagePath, () => {
+                fs.remove(mp4VideoPath, () => {
+                  fs.remove(h264VideoPath);
+                });
+              });
+            });
           }
         });
     } catch (error) {
