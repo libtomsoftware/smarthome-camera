@@ -85,11 +85,9 @@ const attemptUpload = async (task) => {
           });
 
           if (data.result === "success") {
-            fs.remove(csvPath, () => {
-              fs.remove(imagePath, () => {
-                fs.remove(videoPath);
-              });
-            });
+            fs.remove(csvPath);
+            fs.remove(imagePath);
+            fs.remove(videoPath);
           }
         });
     } catch (error) {
