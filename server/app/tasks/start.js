@@ -79,7 +79,6 @@ const attemptUpload = async (task) => {
     }
 
     try {
-      console.warn("sending files...");
       axios
         .post(UPLOAD_URL, formData, {
           headers: {
@@ -124,6 +123,8 @@ module.exports = (task) => {
     task.type === "upload" &&
     !tasksInProgress.includes[task.id]
   ) {
+    console.warn("attempt upload, task id", task.id);
+    console.warn("already in progress", tasksInProgress);
     attemptUpload(task);
   }
 
