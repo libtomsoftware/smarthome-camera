@@ -43,73 +43,73 @@ const attemptCommand = (task) => {
 };
 
 const attemptUpload = async (task) => {
-  const { data } = await axios.post(TASKS_URL, {
-    ...task,
-    progress: "pending",
-  });
+  const formData = new FormData();
+  const imagePath = FILES_PATH + task.id + ".jpg";
+  const imageExists = fs.existsSync(imagePath);
+  const mp4VideoPath = FILES_PATH + task.id + ".mp4";
+  const mp4VideoExists = fs.existsSync(mp4VideoPath);
+  const h264VideoPath = FILES_PATH + task.id + ".h264";
+  const csvPath = DATA_PATH + task.id + ".csv";
+  const csvExists = fs.existsSync(csvPath);
 
-  if (data.progress === "pending") {
-    const formData = new FormData();
-    const imagePath = FILES_PATH + task.id + ".jpg";
-    const imageExists = fs.existsSync(imagePath);
-    const mp4VideoPath = FILES_PATH + task.id + ".mp4";
-    const mp4VideoExists = fs.existsSync(mp4VideoPath);
-    const h264VideoPath = FILES_PATH + task.id + ".h264";
-    const csvPath = DATA_PATH + task.id + ".csv";
-    const csvExists = fs.existsSync(csvPath);
+  if (!imageExists && !csvExists && !mp4VideoExists) {
+    return;
+  }
 
-    if (!imageExists && !csvExists && !mp4VideoExists) {
-      return;
-    }
+  if (csvExists) {
+    formData.append("csv", fs.createReadStream(csvPath));
+  }
 
-    if (csvExists) {
-      formData.append("csv", fs.createReadStream(csvPath));
-    }
+  if (imageExists) {
+    formData.append("image", fs.createReadStream(imagePath));
+  }
 
-    if (imageExists) {
-      formData.append("image", fs.createReadStream(imagePath));
-    }
+  if (mp4VideoExists) {
+    formData.append("video", fs.createReadStream(mp4VideoPath));
+  }
 
-    if (mp4VideoExists) {
-      formData.append("video", fs.createReadStream(mp4VideoPath));
-    }
+  try {
+    axios
+      .post(TASKS_URL, {
+        ...task,
+        progress: "pending",
+      })
+      .then(() => {
+        axios
+          .post(UPLOAD_URL, formData, {
+            headers: {
+              ...formData.getHeaders(),
+            },
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity,
+          })
+          .then(({ data }) => {
+            if (data.result === "success") {
+              axios.post(TASKS_URL, {
+                ...task,
+                progress: data.result,
+              });
 
-    try {
-      axios
-        .post(UPLOAD_URL, formData, {
-          headers: {
-            ...formData.getHeaders(),
-          },
-          maxContentLength: Infinity,
-          maxBodyLength: Infinity,
-        })
-        .then(({ data }) => {
-          if (data.result === "success") {
-            axios.post(TASKS_URL, {
-              ...task,
-              progress: data.result,
-            });
+              tasksInProgress = tasksInProgress.filter(
+                (item) => item !== task.id
+              );
 
-            tasksInProgress = tasksInProgress.filter(
-              (item) => item !== task.id
-            );
+              fs.remove(csvPath, () => {
+                fs.remove(imagePath, () => {
+                  fs.remove(mp4VideoPath, () => {
+                    const h264VideoExists = fs.existsSync(h264VideoPath);
 
-            fs.remove(csvPath, () => {
-              fs.remove(imagePath, () => {
-                fs.remove(mp4VideoPath, () => {
-                  const h264VideoExists = fs.existsSync(h264VideoPath);
-
-                  if (h264VideoExists) {
-                    fs.remove(h264VideoPath);
-                  }
+                    if (h264VideoExists) {
+                      fs.remove(h264VideoPath);
+                    }
+                  });
                 });
               });
-            });
-          }
-        });
-    } catch (error) {
-      console.log("Error", error);
-    }
+            }
+          });
+      });
+  } catch (error) {
+    console.log("Error", error);
   }
 };
 
