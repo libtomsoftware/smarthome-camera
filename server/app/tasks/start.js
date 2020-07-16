@@ -14,6 +14,8 @@ let tasksInProgress = [];
 
 const attemptCommand = (task) => {
   if (task.command) {
+    tasksInProgress.push(task.id);
+
     axios
       .post(TASKS_URL, {
         ...task,
@@ -21,6 +23,8 @@ const attemptCommand = (task) => {
       })
       .then(({ data }) => {
         if (data.progress === "success") {
+          tasksInProgress = tasksInProgress.filter((item) => item !== task.id);
+
           exec(task.command, (err, stdout, stderr) => {
             if (err) {
               console.error(
@@ -41,6 +45,8 @@ const attemptCommand = (task) => {
 };
 
 const attemptUpload = async (task) => {
+  tasksInProgress.push(task.id);
+
   const { data } = await axios.post(TASKS_URL, {
     ...task,
     progress: "pending",
@@ -117,11 +123,14 @@ module.exports = (task) => {
     task.type === "upload" &&
     !tasksInProgress.includes[task.id]
   ) {
-    tasksInProgress.push(task.id);
     attemptUpload(task);
   }
 
-  if (task.progress === "comissioned" && task.type === "command") {
+  if (
+    task.progress === "comissioned" &&
+    task.type === "command" &&
+    !tasksInProgress.includes[task.id]
+  ) {
     attemptCommand(task);
   }
 };
