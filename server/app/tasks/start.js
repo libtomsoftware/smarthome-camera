@@ -115,14 +115,10 @@ const attemptUpload = async (task) => {
 
 module.exports = (task) => {
   if (tasksInProgress.includes(task.id)) {
-    console.warn("Task already handled, aborting...");
-
     return;
   }
 
   tasksInProgress.push(task.id);
-
-  console.warn("tasks in progress", tasksInProgress);
 
   if (task.progress === "comissioned" && task.type === "upload") {
     attemptUpload(task);
